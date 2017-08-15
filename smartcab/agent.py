@@ -23,6 +23,7 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
+        self.trial_cnt = 0
 
 
     def reset(self, destination=None, testing=False):
@@ -39,10 +40,27 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        self.epsilon -= 0.05
+
+        def decay1():
+            self.epsilon -= 0.05
+        def decay2(a):
+            self.epsilon = math.pow(a, self.trial_cnt)
+        def decay3():
+            self.epsilon = 1/math.pow(self.trial_cnt, 2)
+        def decay4(a):
+            self.epsilon = math.exp(-a * self.trial_cnt)
+        def decay5(a):
+            self.epsilon =  math.cos(a * self.trial_cnt)
+
+        self.trial_cnt += 1
+        decay2(0.999)
+        
+
         if testing:
             self.epsilon = 0
             self.alpha = 0
+
+        print "e=" + str(self.epsilon)
 
         return None
 
@@ -170,7 +188,7 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment(verbose=True)
+    env = Environment(verbose=False)
 
     ##############
     # Create the driving agent
@@ -193,7 +211,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, display=False, update_delay=0.01, log_metrics=True)
+    sim = Simulator(env, display=False, update_delay=0.01, log_metrics=True, optimized=True)
     
     ##############
     # Run the simulator
