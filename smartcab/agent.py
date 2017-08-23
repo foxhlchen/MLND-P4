@@ -40,22 +40,9 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-
-        def decay1():
-            self.epsilon -= 0.01
-        def decay2(a):
-            self.epsilon = math.pow(a, self.trial_cnt)
-        def decay3():
-            self.epsilon = 1/math.pow(self.trial_cnt, 2)
-        def decay4(a):
-            self.epsilon = math.exp(-a * self.trial_cnt)
-        def decay5(a):
-            self.epsilon =  math.cos(a * self.trial_cnt)
-
         self.trial_cnt += 1
-        decay2(0.99)
+        self.epsilon = math.pow(0.99, self.trial_cnt)
         
-
         if testing:
             self.epsilon = 0
             self.alpha = 0
@@ -196,7 +183,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, alpha=0.7)
+    agent = env.create_agent(LearningAgent, learning=True, alpha=0.5)
     
     ##############
     # Follow the driving agent
